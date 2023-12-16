@@ -1,0 +1,12 @@
+package sortingInterface;
+
+import java.util.Comparator;
+
+public class SalComp implements Comparator{
+
+	@Override
+	public int compare(Emp e1, Emp e2) {
+		return e1.sal-e2.sal;
+	}
+
+}

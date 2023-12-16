@@ -1,0 +1,174 @@
+package com.hexaware.mainmod;
+
+import java.util.List;
+import java.util.Scanner;
+
+import com.hexaware.dao.ILoanRepository;
+import com.hexaware.dao.ILoanRepositoryImpl;
+import com.hexaware.entity.Loan;
+import com.hexaware.exception.InvalidLoanException;
+
+public class LoanManagement {
+
+    private static final ILoanRepository loanRepository = new ILoanRepositoryImpl();
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        int choice;
+        do {
+            System.out.println("Loan Management System");
+            System.out.println("1. Apply Loan");
+            System.out.println("2. Calculate Interest");
+            System.out.println("3. Check Loan Status");
+            System.out.println("4. Calculate EMI");
+            System.out.println("5. Repay Loan");
+            System.out.println("6. View All Loans");
+            System.out.println("7. View Loan by ID");
+            System.out.println("8. Exit");
+            System.out.println("Enter your choice:");
+
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            try {
+                switch (choice) {
+                    case 1:
+                        applyLoan();
+                        break;
+                    case 2:
+                        calculateInterest();
+                        break;
+                    case 3:
+                        checkLoanStatus();
+                        break;
+                    case 4:
+                        calculateEMI();
+                        break;
+                    case 5:
+                        repayLoan();
+                        break;
+                    case 6:
+                        viewAllLoans();
+                        break;
+                    case 7:
+                        viewLoanById();
+                        break;
+                    case 8:
+                        System.out.println("Exiting the Loan Management System. Goodbye!");
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please enter a valid option.");
+                }
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+            }
+
+        } while (choice != 8);
+
+        scanner.close();
+    }
+
+    private static void applyLoan() {
+    	System.out.println("Enter Loan Details:");
+        System.out.print("Loan ID: ");
+        int loanId = scanner.nextInt();
+        System.out.print("Customer ID: ");
+        int customerId = scanner.nextInt();
+        System.out.print("Principal Amount: ");
+        double principalAmount = scanner.nextDouble();
+        System.out.print("Interest Rate: ");
+        double interestRate = scanner.nextDouble();
+        scanner.nextLine(); // Consume the newline character
+        System.out.print("Loan Term (in months): ");
+        int loanTerm = scanner.nextInt();
+        System.out.print("Loan Type(Home/Car): ");
+        String loanType = scanner.next();
+
+        Loan loan = new Loan(loanId, customerId, principalAmount, interestRate, loanTerm, loanType, "Pending");
+
+        try {
+            boolean result = loanRepository.applyLoan(loan);
+            if (result) {
+                System.out.println("Loan applied successfully!");
+            } else {
+                System.out.println("Failed to apply for the loan.");
+            }
+        } catch (InvalidLoanException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void calculateInterest() {
+        System.out.print("Enter Loan ID: ");
+        int loanId = scanner.nextInt();
+
+        try {
+            double interest = loanRepository.calculateInterest(loanId);
+            System.out.println("Calculated Interest: $" + interest);
+        } catch (InvalidLoanException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void checkLoanStatus() {
+        System.out.print("Enter Loan ID: ");
+        int loanId = scanner.nextInt();
+
+        try {
+            loanRepository.loanStatus(loanId);
+        } catch (InvalidLoanException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void calculateEMI() {
+        System.out.print("Enter Loan ID: ");
+        int loanId = scanner.nextInt();
+
+        try {
+            double emi = loanRepository.calculateEMI(loanId);
+            System.out.println("Calculated EMI: $" + emi);
+        } catch (InvalidLoanException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void repayLoan() {
+        System.out.print("Enter Loan ID: ");
+        int loanId = scanner.nextInt();
+        System.out.print("Enter Repayment Amount: ");
+        double amount = scanner.nextDouble();
+
+        try {
+            int rowsAffected = loanRepository.loanRepayment(loanId, amount);
+            if (rowsAffected > 0) {
+                System.out.println("Loan Repaid successfully!");
+            } else {
+                System.out.println("Failed to repay the loan.");
+            }
+        } catch (InvalidLoanException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void viewAllLoans() {
+        List<Loan> loans = loanRepository.getAllLoans();
+        System.out.println("All Loans:");
+        for (Loan loan : loans) {
+            System.out.println(loan);
+        }
+    }
+
+    private static void viewLoanById() {
+        System.out.print("Enter Loan ID: ");
+        int loanId = scanner.nextInt();
+
+        try {
+            Loan loan = loanRepository.getLoanById(loanId);
+            System.out.println("Loan Details:");
+            System.out.println(loan);
+        } catch (InvalidLoanException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+}

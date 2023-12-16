@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/HX_2869_Java_CodingChallenge/src/com/hexaware/mainmod/MainModule.java"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="1"/>
+    </listAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.hexaware.mainmod.MainModule"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="HX_2869_CodingChallenge"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="HX_2869_Java_CodingChallenge"/>
+</launchConfiguration>

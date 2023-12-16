@@ -1,0 +1,129 @@
+package com.hexaware.mainmod;
+
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+
+import com.hexaware.dao.HospitalServiceImpl;
+import com.hexaware.dao.IHospitalService;
+import com.hexaware.entity.Appointment;
+import com.hexaware.exception.AppointmentNotFoundException;
+import com.hexaware.exception.PatientNumberNotFoundException;
+
+public class MainModule {
+	static IHospitalService serviceImpl = new HospitalServiceImpl();
+	public static void main(String[] args) throws ParseException, AppointmentNotFoundException, PatientNumberNotFoundException, SQLException {
+		System.out.println("==============================\n");
+		System.out.println("Hospital Management System\n");
+		System.out.println("==============================\n\n");
+		System.out.println("1. Find your appointment");
+		System.out.println("2. Get all your appointments");
+		System.out.println("3. Doctor's Appointment");
+		System.out.println("4. Schedule Your Appointment");
+		System.out.println("5. Update your appointment");
+		System.out.println("6. Cancle your appointment");		
+		Scanner sc = new Scanner(System.in);
+		boolean exit = false;
+		while (!exit) {
+			System.out.println("\n\nPlease enter your choice: [1-7]\n\n");
+			System.out.println("[1] Find your appointment");
+			System.out.println("[2] Get all your appointments");
+			System.out.println("[3] Doctor's Appointment");
+			System.out.println("[4] Schedule Your Appointment");
+			System.out.println("[5] Update your appointment");
+			System.out.println("[6] Cancle your appointment");
+
+			int choice = sc.nextInt();
+		    performOperation(choice);
+		    System.out.println("Do you want to perform another operation? (y/n)");
+		    String response = sc.next();
+		    if (response.equalsIgnoreCase("n")) {
+		        exit = true;
+		    }
+		}
+	}
+	private static void performOperation(int choice) throws PatientNumberNotFoundException, SQLException {
+		Scanner sc= new Scanner(System.in);
+	    switch (choice) {
+	        case 1:
+	        	System.out.println("Enter your appointment Id: ");
+                int aid = sc.nextInt();
+                Appointment appointment= serviceImpl.getAppointment(aid);
+                System.out.println(appointment);
+                break;
+	        case 2:
+	        	System.out.println("Enter your patient Id: ");
+                int pid = sc.nextInt();
+                List<Appointment> patientAppointments= serviceImpl.getAppointmentsForPatient(pid);
+                for(Appointment apnt:patientAppointments) {
+                	System.out.println(apnt);
+                }
+                break;
+	        case 3:
+	        	System.out.println("Enter your Doctor's Id: ");
+                int did = sc.nextInt();
+                List<Appointment> doctorAppointments= serviceImpl.getAppointmentsForDoctor(did);
+                for(Appointment dapnt:doctorAppointments) {
+                	System.out.println(dapnt);
+                }
+                break;
+	        case 4:
+	        	System.out.println("Make new Schedule:");
+	        	System.out.println("Enter your patientId:");
+	        	int npid=sc.nextInt();
+	        	System.out.println("Enter your doctorId you want to consult:");
+	        	int ndid = sc.nextInt();
+	        	System.out.println("Enter the date you want to schedule appointment in format(YYYY-MM-DD):");
+	        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	            LocalDate napd = LocalDate.parse(sc.next(), formatter);
+	        	System.out.println("Describe your issue:");
+	        	sc.nextLine();
+	        	String ndesc = sc.nextLine();
+                Appointment newAppointment = new Appointment(npid,ndid,napd,ndesc);
+                serviceImpl.scheduleAppointment(newAppointment);
+                System.out.println("Your new Appointment is\n"+newAppointment);
+                break;
+	        case 5:
+	        	System.out.println("Update your Schedule:");
+	        	System.out.println("Enter your appointmentId:");
+	        	int uaid=sc.nextInt();
+	        	System.out.println("Enter your patientId:");
+	        	int upid=sc.nextInt();
+	        	System.out.println("Enter your doctorId you want to consult:");
+	        	int udid = sc.nextInt();
+	        	System.out.println("Enter the date you want to schedule appointment in format(dd-MM-yyyy):");
+	        	DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	            LocalDate uapd = LocalDate.parse(sc.next(), formatter2);
+	        	System.out.println("Describe your issue:");
+	        	sc.nextLine();
+	        	String udesc = sc.nextLine();
+                Appointment updateAppointment = new Appointment(uaid,upid,udid,uapd,udesc);
+                serviceImpl.updateAppointment(updateAppointment);
+                System.out.println("Your schedule has been updated...\n");
+                System.out.println("Verify your schedule>>"+updateAppointment);
+                break;
+	        case 6:
+	        	System.out.println("Cancel your Schedule:");
+	        	System.out.println("Enter your appointmentId:");
+	        	int caid=sc.nextInt();
+	        	try{
+	        		if(!serviceImpl.cancelAppointment(caid)) {
+	        			throw new AppointmentNotFoundException("No such appointmentId is found,Check your appointmentID");
+	        		}else {
+	        			System.out.println("Your appointment has been cancelled...");
+	        		}
+	        	}catch(AppointmentNotFoundException e){
+	        		System.out.println(e.getMessage());
+	        	}
+                break;
+	        default:
+	            System.out.println("Invalid choice. Please enter a number between 1 and 7.");
+	            break;
+	    }
+	}
+}

@@ -1,0 +1,113 @@
+package com.hexaware.dao;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.hexaware.util.DBConnUtil;
+
+public class ILoanRepositoryImpl implements ILoanRepository {
+
+	
+	private Connection connection;
+	public static boolean isLoggedIn=false;
+    public HospitalServiceImpl() {
+        this.connection = DBConnUtil.getConnection();
+    }
+	
+	@Override
+	public boolean applyLoan(Loan loan) throws InvalidLoanException {
+		@Override
+	    public boolean applyLoan(Loan loan) throws InvalidLoanException {
+	        System.out.println("Loan Details:");
+	        System.out.println("Principal Amount: " + loan.getPrincipalAmount());
+	        System.out.println("Interest Rate: " + loan.getInterestRate());
+	        System.out.println("Loan Tenure: " + loan.getLoanTenure());
+
+	        System.out.print("Do you want to apply for this loan? (Yes/No): ");
+	        String userResponse = scanner.nextLine().trim();
+
+	        if ("Yes".equalsIgnoreCase(userResponse)) {
+	            boolean loanAppliedSuccessfully = Database.insertLoan(loan);
+	            if (loanAppliedSuccessfully) {
+	                System.out.println("Loan application submitted successfully!");
+	                return true;
+	            } else {
+	                throw new InvalidLoanException("Failed to apply for the loan. Please try again.");
+	            }
+	        } else {
+	            System.out.println("Loan application canceled by the user.");
+	            return false;
+	        }
+	}
+
+	@Override
+	public double calculateInterest(long loanId) throws InvalidLoanException {
+		try {
+	        // Assuming you have a Database class with a method to retrieve the loan details
+	        Loan loan = Database.getLoanById(loanId);
+
+	        if (loan == null) {
+	            throw new InvalidLoanException("Loan not found with ID: " + loanId);
+	        }
+
+	        // Perform interest calculation based on loan details
+	        double interest = (loan.getPrincipalAmount() * loan.getInterestRate() * loan.getLoanTenure()) / 12;
+
+	        return interest;
+	    } catch (Exception e) {
+	        // Handle exceptions (e.g., SQLException) and convert them to InvalidLoanException
+	        throw new InvalidLoanException("Error calculating interest for loan with ID: " + loanId, e);
+	    }
+	}
+
+	@Override
+	public double calculateInterest(long loanId, double principalAmount, double interestRate, int loanTenure)
+			throws InvalidLoanException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void loanStatus(long loanId) throws InvalidLoanException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public double calculateEMI(long loanId) throws InvalidLoanException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double calculateEMI(long loanId, double principalAmount, double interestRate, int loanTenure)
+			throws InvalidLoanException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int loanRepayment(long loanId, double amount) throws InvalidLoanException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Loan> getAllLoans() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Loan getLoanById(long loanId) throws InvalidLoanException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean applyLoan(Loan loan) throws InvalidLoanException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

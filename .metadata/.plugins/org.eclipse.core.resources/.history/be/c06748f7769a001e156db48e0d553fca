@@ -1,0 +1,79 @@
+package TicketBookingSystem;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+
+public class TBS {
+	static int totalSeats=100;
+	static int seatsBooked=0;
+	static int fare=200;
+	static boolean isAbove50 =false;
+	static boolean isAbove75=false;
+	static final Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) {
+		System.out.println("Enter how many passengers are there:");
+		int numInput = sc.nextInt();
+		List<Passenger> pList = new ArrayList<>();
+		for(int i=1;i<=numInput;i++) {
+			System.out.println("Enter passenger id:");
+			int pId = sc.nextInt();
+			System.out.println("Enter passenger name:");
+			String pName=sc.nextLine();
+	        System.out.println("Enter the birthdate in the format DD-MMM-YYYY (e.g., 15-SEP-1995): ");
+	        String pDob = sc.next();
+	        boolean isSC=false;
+	        int age=0;
+	        try {
+	            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+	            Date birthDate = sdf.parse(pDob);
+	            age = calculateAge(birthDate);
+	            System.out.println(pName+", You are " + age + " years old.");
+	            if(age>50) {
+	            	System.out.println("Congrats, you are eligible for extra 10% of under Senior-Citizen scheme:");
+	            	isSC=true;
+	            }
+
+	        } catch (ParseException e) {
+	            System.err.println("Error parsing the date. Please enter the date in the correct(DD-MMM-YYYY (e.g., 15-SEP-1995)) format.");
+	        }
+	        System.out.println("Select Gender: (M/F)");
+	        System.out.println("NOTE: Female candidate will get extra 14.7% Quota under LadiesQuota schme");
+	        char gender = sc.next().charAt(0);
+	        boolean isFemale=false;
+	        if(gender=='F' || gender=='f') {
+	        	isFemale=true;
+	        }
+	        System.out.println("Available seats: "+totalSeats);
+	        System.out.println("How many seats you have to reserve:");
+	        int seatBooking=sc.nextInt();
+	        if(totalSeats>seatBooking) {
+	        	pList.add(new Passenger(pId,pName,age,gender,seatBooking));
+	        	
+	        	
+	        }
+	        else {
+	        	System.err.println("only "+totalSeats+ " available");
+	        }
+		}
+		System.out.println("Here is the passenger list:");
+		for(Passenger p:pList) {
+			System.out.println(p);
+		}
+		
+	}
+	private static int calculateAge(Date birthDate) {
+        Calendar birthCalendar = Calendar.getInstance();
+        birthCalendar.setTime(birthDate);
+        Calendar currentCalendar = Calendar.getInstance();
+        int age = currentCalendar.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR);
+        if (currentCalendar.get(Calendar.DAY_OF_YEAR) < birthCalendar.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+        return age;
+    }
+}

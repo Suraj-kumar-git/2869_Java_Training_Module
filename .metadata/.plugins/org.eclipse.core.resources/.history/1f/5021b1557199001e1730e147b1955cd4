@@ -1,0 +1,66 @@
+package com.hexaware.dao;
+
+import java.sql.Connection;
+import java.util.List;
+
+import com.hexaware.entity.Artwork;
+import com.hexaware.util.DBConnUtil;
+import com.hexaware.util.DBPropertyUtil;
+
+public class VirtualArtGalleryImpl implements IVirtualArtGallery {
+	private Connection connection;
+	
+	String connectionString=DBPropertyUtil.getConnectionString("db.properties");
+    public VirtualArtGalleryImpl() {
+        this.connection = DBConnUtil.getConnection(connectionString);
+    }
+
+	@Override
+	public boolean addArtwork(Artwork artwork) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean updateArtwork(Artwork artwork) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean removeArtwork(int artworkId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Artwork getArtworkById(int artworkId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public List<Artwork> searchArtworks(String keyword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean addArtworkToFavorite(int userId, int artworkId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean removeArtworkFromFavorite(int userId, int artworkId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Artwork> getUserFavoriteArtworks(int userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

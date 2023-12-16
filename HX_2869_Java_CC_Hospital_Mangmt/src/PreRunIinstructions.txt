@@ -1,0 +1,9 @@
+Suraj Kumar
+surajkumar12st.joseph@gmail.com
+Java Coding Challenge(Hospital Management System)
+Some Instructions to run the program:
+
+1. Add MySQL-Connector 8.03.94 as the external jar file in build path. This will added as referenced libraries.
+2. Tables name must be same as the entity name. You can match the database name from the db.properties file.
+3. The predefined classes must be imported.
+4. If the password for connecting to database contains any special character then modify the password as read by db.properties file. e.g. '#'-'%23', ' '-'%20';

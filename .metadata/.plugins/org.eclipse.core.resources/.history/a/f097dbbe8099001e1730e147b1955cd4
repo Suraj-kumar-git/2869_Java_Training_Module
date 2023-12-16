@@ -1,0 +1,45 @@
+package com.hexaware.dao;
+
+import java.util.List;
+
+import com.hexaware.entity.Appointment;
+
+public class HospitalServiceImpl implements IHospitalService{
+
+	@Override
+	public Appointment getAppointment(int appointmentId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Appointment> getAppointmentsForPatient(int patientId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Appointment> getAppointmentsForDoctor(int doctorId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean scheduleAppointment(Appointment appointment) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean updateAppointment(Appointment appointment) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean cancelAppointment(int appointmentId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

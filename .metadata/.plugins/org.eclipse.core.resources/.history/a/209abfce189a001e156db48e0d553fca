@@ -1,0 +1,113 @@
+package com.hexaware.mainmod;
+import java.util.Scanner;
+
+import com.hexaware.dao.ILoanRepository;
+import com.hexaware.dao.ILoanRepositoryImpl;
+import com.hexaware.entity.Loan;
+import com.hexaware.exception.InvalidLoanException;
+
+public class LoanManagement {
+
+    private static final Scanner sc= new Scanner(System.in);
+    private static final ILoanRepository loanRepository = new ILoanRepositoryImpl();
+
+    public static void main(String[] args) {
+        while (true) {
+            displayMenu();
+
+            System.out.print("Enter your choice: ");
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    applyLoan();
+                    break;
+                case 2:
+                    getAllLoan();
+                    break;
+                case 3:
+                    getLoan();
+                    break;
+                case 4:
+                    loanRepayment();
+                    break;
+                case 5:
+                    System.out.println("Exiting Loan Management System. Goodbye!");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please enter a valid option.");
+            }
+        }
+    }
+
+    private static void displayMenu() {
+        System.out.println("Loan Management System Menu:");
+        System.out.println("1. Apply Loan");
+        System.out.println("2. Get All Loans");
+        System.out.println("3. Get Loan by ID");
+        System.out.println("4. Loan Repayment");
+        System.out.println("5. Exit");
+    }
+
+    private static void applyLoan() {
+        
+        Loan loan = new Loan();
+
+        try {
+            if (loanRepository.applyLoan(loan)) {
+                System.out.println("Loan applied successfully!");
+            } else {
+                System.out.println("Loan application canceled by the user.");
+            }
+        } catch (InvalidLoanException e) {
+            System.err.println("Error applying for the loan: " + e.getMessage());
+        }
+    }
+
+    private static void getAllLoan() {
+        // You should implement this method to retrieve and display all loans
+        // For simplicity, let's assume the method returns a List<Loan>
+        try {
+            for (Loan loan : loanRepository.getAllLoans()) {
+                System.out.println(loan); // Assuming you have overridden toString() in Loan class
+            }
+        } catch (Exception e) {
+            System.err.println("Error retrieving all loans: " + e.getMessage());
+        }
+    }
+
+    private static void getLoan() {
+        // You should implement this method to take user input and retrieve a loan by ID
+        System.out.print("Enter Loan ID: ");
+        long loanId = Long.parseLong(sc.nextLine().trim());
+
+        try {
+            Loan loan = loanRepository.getLoanById(loanId);
+            System.out.println("Loan Details:\n" + loan);
+        } catch (InvalidLoanException e) {
+            System.err.println("Error retrieving loan: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid Loan ID format. Please enter a valid number.");
+        }
+    }
+
+    private static void loanRepayment() {
+        // You should implement this method to take user input and perform loan repayment
+        // For simplicity, let's assume the user enters the Loan ID and repayment amount
+        try {
+            System.out.print("Enter Loan ID: ");
+            long loanId = Long.parseLong(sc.nextLine().trim());
+
+            System.out.print("Enter Repayment Amount: ");
+            double repaymentAmount = Double.parseDouble(sc.nextLine().trim());
+
+            int noOfEmisPaid = loanRepository.loanRepayment(loanId, repaymentAmount);
+            System.out.println("Number of EMIs paid: " + noOfEmisPaid);
+        } catch (InvalidLoanException e) {
+            System.err.println("Error processing loan repayment: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid input format. Please enter valid numbers.");
+        }
+    }
+}
+

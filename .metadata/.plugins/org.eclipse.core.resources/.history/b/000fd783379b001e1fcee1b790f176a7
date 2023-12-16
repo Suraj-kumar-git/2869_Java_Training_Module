@@ -1,0 +1,249 @@
+package TicketBookingSystem;
+
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+
+public class TBS {
+	static int totalSeats = 100;
+	static double fare = 200;
+	static boolean isAbove50 = true;
+	static boolean isAbove75 = true;
+	static int remainFrom50 = 50;
+	static int remainFrom75 = 75;
+//	static double totalFare;
+	static final Scanner sc = new Scanner(System.in);
+
+	public static void main(String[] args) {
+		System.out.println("Enter how many passengers are there:");
+		int numInput = sc.nextInt();
+		List<Passenger> pList = new ArrayList<>();
+		for(int i=1;i<=numInput;i++) {
+			double totalFare=0;
+			int seatsBooked=0;
+			System.out.println("\n\nEnter passenger-"+i+" id:");
+			int pId = sc.nextInt();
+			System.out.println("Enter passenger-"+i+" name:");
+			sc.nextLine();
+			String pName=sc.nextLine();
+	        System.out.println("Enter the birthdate in the format DD-MMM-YYYY (e.g., 15-SEP-1995): ");
+	        String pDob = sc.next();
+	        boolean isSC=false;
+	        int age=0;
+	        try {
+	            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+	            Date birthDate = sdf.parse(pDob);
+	            age = calculateAge(birthDate);
+	            System.out.println(pName+", You are " + age + " years old.");
+	            if(age>50) {
+	            	System.out.println("Congrats, you are eligible for extra 10% of under Senior-Citizen scheme:");
+	            	isSC=true;
+	            }
+
+	        } catch (ParseException e) {
+	            System.err.println("Error parsing the date. Please enter the date in the correct(DD-MMM-YYYY (e.g., 15-SEP-1995)) format.");
+	        }
+	        System.out.println("Select Gender: (M/F)");
+	        System.out.println("NOTE: Female candidate will get extra 14.7% Quota under LadiesQuota scheme");
+	        char gender = sc.next().charAt(0);
+	        boolean isFemale=false;
+	        if(gender=='F' || gender=='f') {
+	        	isFemale=true;
+	        }
+	        System.out.println("Available seats: "+totalSeats);
+	        System.out.println("How many seats you have to reserve:");
+	        int seatBooking=sc.nextInt();
+	        if(seatBooking<totalSeats) {
+	        	if(isAbove50) {
+	        		if(remainFrom50-seatBooking>0) {
+	        			System.out.println("Original Fare is 200");
+	        			totalFare=fare*seatBooking;
+	        			totalSeats-=seatBooking;
+	        			seatsBooked+=seatBooking;
+	        			remainFrom50-=seatBooking;
+	        			remainFrom75-=seatBooking;
+	        		}else if(remainFrom50-seatBooking<0) {
+	        			int greaterThan50=seatBooking-remainFrom50;
+	        			System.out.println("Original Fare is 200");
+	        			totalFare+=200*remainFrom50;
+	        			seatsBooked+=remainFrom50;
+	        			totalSeats-=remainFrom50;
+	        			remainFrom50=0;
+	        			isAbove50=false;
+	        			if(greaterThan50<25) {
+	        				System.out.println(greaterThan50+" tickets are booked with a fine of 18% extra on fare charges.");
+	        				fare=fare+fare*0.18;
+	        				totalFare=totalFare+(fare*greaterThan50);
+		        			seatsBooked+=greaterThan50;
+		        			totalSeats-=greaterThan50;
+	        			}else {
+	        				System.out.println("25 tickets are booked with a fine of 18% extra on fare charges.");
+	        				fare=fare+fare*0.18;
+	        				totalFare+=(fare*25);
+	        				totalSeats-=25;
+	        				seatsBooked+=25;
+	        				int greaterThan75=seatBooking-seatsBooked;
+	        				System.out.println(greaterThan75+" tickets are booked with a fine of 32% extra on fare charges.");
+	        				fare=264;
+	        				totalFare+=fare*greaterThan75;
+	        				totalSeats-=greaterThan75;
+	        				remainFrom75=0;
+	        				isAbove75=false;
+	        			}
+	        		}
+	        	}else if(!isAbove50) {
+	        		int greaterThan50=(totalSeats-25);
+        			if(greaterThan50>seatBooking) {
+        				if(fare==200) {
+        					fare+=fare*0.18;
+        				}
+        				System.out.println(seatBooking+" tickets are booked with a fine of 18% extra on fare charges.");
+        				totalFare+=(fare*seatBooking);
+        				totalSeats-=seatBooking;
+        				seatsBooked+=seatBooking;
+        			}else {
+        				if(fare==200) {
+        					fare+=fare*0.18;
+        				}
+        				System.out.println(greaterThan50+" tickets are booked with a fine of 18% extra on fare charges.");
+        				totalFare+=fare*greaterThan50;
+        				seatsBooked+=greaterThan50;
+        				totalSeats-=greaterThan50;
+        				int greaterThan75=seatBooking-seatsBooked;
+        				System.out.println(greaterThan75+" tickets are booked with a fine of 32% extra on fare charges.");
+        				fare=264;
+        				totalFare+=fare*greaterThan75;
+        				totalSeats-=greaterThan75;
+        				seatsBooked+=greaterThan75;
+        				remainFrom75=0;
+        				isAbove75=false;
+        			}
+	        	}
+	        	if(isSC) {
+	        		totalFare=totalFare-totalFare*0.1;
+	        	}
+	        	if(isFemale) {
+	        		totalFare-=totalFare*0.147;
+	        	}
+	        }else {
+	        	System.err.println("only "+totalSeats+ " available");
+	        	System.out.println("Press 'Y/y' to continue to book all remaining seats:");
+	        	char yesOrNo=sc.next().charAt(0);
+	        	if(yesOrNo=='Y' || yesOrNo=='y') {
+//	        		seatBooking=totalSeats;
+	        		if(isAbove50) {
+		        		if(remainFrom50-seatBooking>0) {
+		        			totalFare=fare*seatBooking;
+		        			totalSeats-=seatBooking;
+		        			seatsBooked+=seatBooking;
+		        			remainFrom50-=seatBooking;
+		        			remainFrom75-=seatBooking;
+		        		}else if(remainFrom50-seatBooking<0) {
+		        			int greaterThan50=seatBooking-remainFrom50;
+		        			totalFare+=200*remainFrom50;
+		        			seatsBooked+=remainFrom50;
+		        			totalSeats-=remainFrom50;
+		        			remainFrom50=0;
+		        			isAbove50=false;
+		        			if(greaterThan50<25) {
+		        				fare=fare+fare*0.18;
+		        				System.out.println(greaterThan50+" tickets are booked with a fine of 18% extra on fare charges.");
+		        				totalFare=totalFare+(fare*greaterThan50);
+			        			seatsBooked+=greaterThan50;
+			        			totalSeats-=greaterThan50;
+		        			}else {
+		        				fare=fare+fare*0.18;
+		        				System.out.println("25 tickets are booked with a fine of 18% extra on fare charges.");
+		        				totalFare+=(fare*25);
+		        				totalSeats-=25;
+		        				seatsBooked+=25;
+		        				int greaterThan75=seatBooking-seatsBooked;
+		        				System.out.println(greaterThan75+" tickets are booked with a fine of 32% extra on fare charges.");
+		        				fare=264;
+		        				totalFare+=fare*greaterThan75;
+		        				totalSeats-=greaterThan75;
+		        				remainFrom75=0;
+		        				isAbove75=false;
+		        			}
+		        		}
+		        	}else if(!isAbove50) {
+		        		int greaterThan50=(totalSeats-25);
+	        			if(greaterThan50>seatBooking) {
+	        				if(fare==200) {
+	        					fare+=fare*0.18;
+	        				}
+	        				System.out.println(seatBooking+" tickets are booked with a fine of 18% extra on fare charges.");
+	        				totalFare+=(fare*seatBooking);
+	        				totalSeats-=seatBooking;
+	        				seatsBooked+=seatBooking;
+	        			}else {
+	        				if(fare==200) {
+	        					fare+=fare*0.18;
+	        				}
+	        				System.out.println(greaterThan50+" tickets are booked with a fine of 18% extra on fare charges.");
+		        			totalFare+=fare*greaterThan50;
+		        			seatsBooked+=greaterThan50;
+		        			totalSeats-=greaterThan50;
+	        					int greaterThan75=(seatBooking-greaterThan50);
+		        				System.out.println(greaterThan75+" tickets are booked with a fine of 32% extra on fare charges.");
+		        				fare=264;
+		        				totalFare+=fare*greaterThan75;
+		        				totalSeats-=greaterThan75;
+		        				seatsBooked+=greaterThan75;
+		        				remainFrom75=0;
+		        				isAbove75=false;
+	        				}
+	        			}
+		        	}
+		        	if(isSC) {
+		        		totalFare=totalFare-totalFare*0.1;
+		        	}
+		        	if(isFemale) {
+		        		totalFare-=totalFare*0.147;
+		        	}
+		        }else {
+	        		System.out.println("Good bye then...");
+	        		System.exit(0);
+	        	}
+	        }
+
+	String pattern = "###.##";
+	DecimalFormat formatter = new DecimalFormat(pattern);
+	String formattedValue = formatter.format(totalFare);
+	double formattedTotalFare = Double.parseDouble(
+			formattedValue);System.out.println("Ok...Thanks for your bookings. We have reserved you with "+seatsBooked+" seats. Your total fare is "+formattedTotalFare);if(age>50&&!isFemale)
+	{
+	        	System.out.println("You got 10% discount as Senior Citizen.");
+	        }else if(age>50&&isFemale)
+	{
+		System.out.println("You got 10% discount as Senior Citizen and extra 14.7% under Ladies Quota");
+	}else if(isFemale&&age<50)
+	{
+		System.out.println("You got 14.7% discount under Ladies Quota");
+	}else
+	{
+		System.out.println("Sorry...!You got no discount");
+	}
+
+	pList.add(new Passenger(pId,pName,age,gender,seatsBooked,formattedTotalFare));}System.out.println("\n\nHere is the passenger list:");System.out.println("=======================================================================");for(Passenger p:pList)
+	{
+		System.out.println(p);
+	}System.out.println("=======================================================================");
+	}
+
+	private static int calculateAge(Date birthDate) {
+		Calendar birthCalendar = Calendar.getInstance();
+		birthCalendar.setTime(birthDate);
+		Calendar currentCalendar = Calendar.getInstance();
+		int age = currentCalendar.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR);
+		if (currentCalendar.get(Calendar.DAY_OF_YEAR) < birthCalendar.get(Calendar.DAY_OF_YEAR)) {
+			age--;
+		}
+		return age;
+	}
+}

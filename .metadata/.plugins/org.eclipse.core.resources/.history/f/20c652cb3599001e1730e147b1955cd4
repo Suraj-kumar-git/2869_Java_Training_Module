@@ -1,0 +1,65 @@
+package com.hexaware.mainmod;
+
+import java.util.Scanner;
+
+public class MainModule {
+
+	public static void main(String[] args) {
+		System.out.println("==============================\n");
+		System.out.println("Virtual Art Gallery System\n");
+		System.out.println("==============================\n\n");
+		System.out.println("1. Login");
+		System.out.println("2. Register");
+		System.out.println("3. Browse Artworks");
+		System.out.println("4. Search Artists");
+		System.out.println("5. View Galleries");
+		System.out.println("6. User Profile");
+		System.out.println("7. Logout");
+		System.out.println("\n\nPlease enter your choice: [1-7]\n\n");
+		System.out.println("[1] Login");
+		System.out.println("[2] Register");
+		System.out.println("[3] Browse Artworks");
+		System.out.println("[4] Search Artists");
+		System.out.println("[5] View Galleries");
+		System.out.println("[6] User Profile");
+		System.out.println("[7] Logout");
+		
+		Scanner sc = new Scanner(System.in);
+		int choice = sc.nextInt();
+
+	    // Perform operations based on the user's choice
+	    performOperation(choice);
+	    
+	    sc.close(); // Close the scanner to avoid resource leaks
+	}
+
+	private static void performOperation(int choice) {
+	    // Implement the logic to perform operations based on the user's choice
+	    switch (choice) {
+	        case 1:
+	            // Implement login logic
+	            break;
+	        case 2:
+	            // Implement register logic
+	            break;
+	        case 3:
+	            // Implement browse artworks logic
+	            break;
+	        case 4:
+	            // Implement search artists logic
+	            break;
+	        case 5:
+	            // Implement view galleries logic
+	            break;
+	        case 6:
+	            // Implement user profile logic
+	            break;
+	        case 7:
+	            // Implement logout logic
+	            break;
+	        default:
+	            System.out.println("Invalid choice. Please enter a number between 1 and 7.");
+	            break;
+	    }
+	}
+}
