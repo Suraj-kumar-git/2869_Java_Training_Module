@@ -15,6 +15,12 @@ public class Passenger {
 		this.seatsBooked=seatsBooked;
 		this.totalFare=totalFare;
 	}
+	public Passenger(int id, String name, int age, char gender) {
+		this.id = id;
+		this.name = name;
+		this.age = age;
+		this.gender = gender;
+	}
 	public double getTotalFare() {
 		return totalFare;
 	}

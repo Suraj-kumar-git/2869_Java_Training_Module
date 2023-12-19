@@ -1,5 +1,0 @@
-package collectionInterface;
-
-public class Stack_Vector {
-	Stack stck
-}

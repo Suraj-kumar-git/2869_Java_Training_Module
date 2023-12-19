@@ -1,9 +1,0 @@
-package jUnit;
-
-public class Test {
-	@TestAdd
-	public void testAdd() {
-		Assert.assertEquals(9,JUnit.add(3,5));
-	}
-
-}
