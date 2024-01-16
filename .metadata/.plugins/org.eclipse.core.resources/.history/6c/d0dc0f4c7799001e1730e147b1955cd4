@@ -1,7 +1,0 @@
-package com.hexaware.exception;
-
-public class PatientNumberNotFoundException extends Exception {
-    public patientNumberNotFoundException(String message) {
-        super(message);
-    }
-}

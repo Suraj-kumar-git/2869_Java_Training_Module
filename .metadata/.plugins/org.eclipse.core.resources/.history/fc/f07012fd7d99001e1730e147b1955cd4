@@ -1,7 +1,0 @@
-package com.hexaware.mainmod;
-
-public class MainModule {
-	public static void main(String[] args) {
-		return;
-	}
-}

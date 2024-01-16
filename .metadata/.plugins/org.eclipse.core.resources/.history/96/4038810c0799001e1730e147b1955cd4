@@ -1,7 +1,0 @@
-package com.hexaware.util;
-
-public class PropertyUtil {
-	public static String getPropertyString() {
-		return "";
-	}
-}
