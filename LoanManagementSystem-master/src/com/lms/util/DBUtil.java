@@ -8,7 +8,7 @@ public class DBUtil {
 
     private static final String url = "jdbc:mysql://localhost:3306/loanmanagementsystem";
     private static final String username = "root";
-    private static final String password = "lnct91799san";
+    private static final String password = "password";
 
     public static Connection getDBConn() throws SQLException {
         try {
